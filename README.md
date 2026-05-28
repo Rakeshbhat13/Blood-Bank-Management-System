@@ -113,17 +113,6 @@ blood_bank/
 
 ---
 
-## 👥 Team
-
-| Name            | Role          |
-|-----------------|---------------|
-| B Rakesh Bhat   | Developer     |
-| B G Bharadwaj   | Developer     |
-| Jnanamshu K     | Developer     |
-
-**Institution:** NMAM Institute of Technology, Nitte (Deemed to be University)
-**Course:** CS2102-1 | Database Management Systems Mini Project
-
 ---
 
 ## 📄 License
