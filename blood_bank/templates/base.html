@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Bank Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">
+        <div class="nav-logo">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2 C8 8 5 11 5 15 a7 7 0 0 0 14 0 C19 11 16 8 12 2Z" fill="white"/>
+            </svg>
+        </div>
+        <div class="nav-title">Blood Bank</div>
+    </div>
+    <div class="nav-links">
+        <a href="{{ url_for('dashboard') }}"     class="nav-link {% if request.endpoint == 'dashboard'     %}active{% endif %}">Dashboard</a>
+        <a href="{{ url_for('donors') }}"        class="nav-link {% if request.endpoint == 'donors'        %}active{% endif %}">Donors</a>
+        <a href="{{ url_for('inventory') }}"     class="nav-link {% if request.endpoint == 'inventory'     %}active{% endif %}">Inventory</a>
+        <a href="{{ url_for('requests_page') }}" class="nav-link {% if request.endpoint == 'requests_page' %}active{% endif %}">Requests</a>
+        <a href="{{ url_for('reports') }}"       class="nav-link {% if request.endpoint == 'reports'       %}active{% endif %}">Reports</a>
+    </div>
+</nav>
+
+<main class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+
+
+
+</body>
+</html>

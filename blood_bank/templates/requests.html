@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <h1>Blood Requests</h1>
+    <p class="page-sub">Manage hospital blood requests</p>
+</div>
+
+<!-- New Request Form -->
+<div class="card">
+    <div class="card-header">New Blood Request</div>
+    <form method="POST" action="{{ url_for('add_request') }}">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Patient Name</label>
+                <input type="text" name="patient_name" placeholder="Full name" required>
+            </div>
+            <div class="form-group">
+                <label>Blood Group</label>
+                <select name="blood_group" required>
+                    <option value="">Select blood group</option>
+                    {% for bg in ['A+','A-','B+','B-','AB+','AB-','O+','O-'] %}
+                    <option value="{{ bg }}">{{ bg }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Units Needed</label>
+                <input type="number" name="units_needed" placeholder="1" min="1" required>
+            </div>
+            <div class="form-group">
+                <label>Hospital Name</label>
+                <input type="text" name="hospital_name" placeholder="Hospital name" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Request</button>
+    </form>
+</div>
+
+<!-- Requests Table -->
+<div class="card">
+    <div class="card-header">
+        <span>All Requests</span>
+        <span class="badge">{{ requests|length }}</span>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Patient</th>
+                <th>Blood Group</th>
+                <th>Units</th>
+                <th>Hospital</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in requests %}
+            <tr>
+                <td class="text-muted">{{ r.request_id }}</td>
+                <td><strong>{{ r.patient_name }}</strong></td>
+                <td><span class="tag tag-{{ r.blood_group|replace('+','pos')|replace('-','neg') }}">{{ r.blood_group }}</span></td>
+                <td>{{ r.units_needed }}</td>
+                <td class="text-muted">{{ r.hospital_name }}</td>
+                <td class="text-muted">{{ r.request_date }}</td>
+                <td><span class="status status-{{ r.status|lower }}">{{ r.status }}</span></td>
+                <td>
+                    {% if r.status == 'Pending' %}
+                    <form method="POST" action="{{ url_for('fulfill_request', request_id=r.request_id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-green">Fulfill</button>
+                    </form>
+                    {% else %}
+                    <span class="text-muted">—</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

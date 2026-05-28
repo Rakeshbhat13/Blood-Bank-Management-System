@@ -1,0 +1,59 @@
+# ── Python ────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+
+# ── Virtual Environments ──────────────────────────────────────
+venv/
+env/
+.venv/
+ENV/
+
+# ── Environment Variables & Secrets ──────────────────────────
+.env
+.env.local
+.env.production
+config.py
+secrets.py
+
+# ── Flask ─────────────────────────────────────────────────────
+instance/
+.flask_session/
+flask_session/
+
+# ── Database ──────────────────────────────────────────────────
+*.sql.bak
+*.db
+*.sqlite3
+
+# ── OS Files ──────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDEs & Editors ────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.user
+*.swp
+*.swo
+*~
+
+# ── Logs ─────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Distribution / Build ──────────────────────────────────────
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# ── Pytest ───────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/

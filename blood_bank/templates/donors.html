@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <h1>Donors</h1>
+    <p class="page-sub">Registered blood donors</p>
+</div>
+
+<!-- Add Donor Form -->
+<div class="card">
+    <div class="card-header">Register New Donor</div>
+    <form method="POST" action="{{ url_for('add_donor') }}">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="name" placeholder="e.g. Rahul Shetty" required>
+            </div>
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" name="age" placeholder="18–65" min="18" max="65" required>
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select name="gender" required>
+                    <option value="">Select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Blood Group</label>
+                <select name="blood_group" required>
+                    <option value="">Select blood group</option>
+                    {% for bg in ['A+','A-','B+','B-','AB+','AB-','O+','O-'] %}
+                    <option value="{{ bg }}">{{ bg }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" name="phone" placeholder="10-digit number" required>
+            </div>
+            <div class="form-group">
+                <label>Email <span class="optional">(optional)</span></label>
+                <input type="email" name="email" placeholder="email@example.com">
+            </div>
+            <div class="form-group form-full">
+                <label>Address <span class="optional">(optional)</span></label>
+                <input type="text" name="address" placeholder="City, Karnataka">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Register Donor</button>
+    </form>
+
+    <div class="section-subheader">
+        <h2>Record Donation</h2>
+        <p class="page-sub">Add a donation for an existing donor</p>
+    </div>
+    <form method="POST" action="{{ url_for('add_donation') }}">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Select Donor</label>
+                <select name="donor_id" required>
+                    <option value="">Select donor</option>
+                    {% for d in donors %}
+                    <option value="{{ d.donor_id }}">{{ d.name }} ({{ d.blood_group }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Donation Date</label>
+                <input type="date" name="donation_date" value="{{ current_date }}" required>
+            </div>
+            <div class="form-group">
+                <label>Expiry Date</label>
+                <input type="date" name="expiry_date" value="{{ expiry_date }}" required>
+            </div>
+            <div class="form-group">
+                <label>Units Donated</label>
+                <input type="number" name="quantity" value="1" min="1" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Record Donation</button>
+    </form>
+</div>
+
+<!-- Donors Table -->
+<div class="card">
+    <div class="card-header">
+        <span>All Donors</span>
+        <span class="badge">{{ donors|length }}</span>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Blood Group</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Last Donated</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in donors %}
+            <tr>
+                <td class="text-muted">{{ d.donor_id }}</td>
+                <td><strong>{{ d.name }}</strong></td>
+                <td>{{ d.age }}</td>
+                <td>{{ d.gender }}</td>
+                <td>
+                    <span class="tag tag-{{ d.blood_group|replace('+','pos')|replace('-','neg') }}">
+                        {{ d.blood_group }}
+                    </span>
+                </td>
+                <td>{{ d.phone }}</td>
+                <td class="text-muted">{{ d.address or '—' }}</td>
+                <td class="text-muted">{{ d.last_donation_date or 'Never' }}</td>
+
+                <!-- 🔥 NEW DONATE BUTTON -->
+                <td>
+                    <form method="POST" action="{{ url_for('add_donation') }}">
+                        <input type="hidden" name="donor_id" value="{{ d.donor_id }}">
+                        <input type="hidden" name="donation_date" value="{{ current_date }}">
+                        <input type="hidden" name="expiry_date" value="{{ expiry_date }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-success btn-sm">
+                            Donate
+                        </button>
+                    </form>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
